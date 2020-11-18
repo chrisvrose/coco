@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    pgdb:
+        image: postgres
+        hostname: pgdb
+        restart: always
+        ports:
+            - 5432:5432
+        volumes:
+            - coursedenpgdata:/var/lib/postgresql/data
+        environment:
+            - PGDATA=/var/lib/postgresql/data/pgdata
+            - POSTGRES_DB=${DBDB}
+            - POSTGRES_USER=${DBUSER}
+            - POSTGRES_PASSWORD=${DBPWD}
+            - PGPASSWORD=${DBROOTPWD}
+
+volumes:
+    coursedenpgdata:
