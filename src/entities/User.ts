@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { genSalt, hash } from 'bcryptjs';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+const bcryptRounds = 10;
 
 @Entity()
 export class User {
@@ -15,4 +18,10 @@ export class User {
 
     @Column()
     role: number;
+
+    @BeforeInsert()
+    async beforeInsert() {
+        const salt = await genSalt(bcryptRounds);
+        this.pwd = await hash(this.pwd, salt);
+    }
 }

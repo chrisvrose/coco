@@ -32,3 +32,20 @@ describe('Sanity', function () {
         assert.strictEqual(resParsed.status, 'not found');
     });
 });
+
+describe('User tests', function () {
+    it('should get users', async () => {
+        const res = await chai.request(await app).get('/user');
+        console.log(res.text);
+        assert.strictEqual(res.status, 200);
+    });
+    it('should make users', async () => {
+        const res = await chai
+            .request(await app)
+            .post('/user')
+            .set('content-type', 'application/json')
+            .send({ email: 'habababa', pwd: 'password', role: 1 });
+        console.log(res.text);
+        assert.strictEqual(res.status, 200);
+    });
+});
