@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import userAPI from './api/userAPI';
+import apiList from './api';
 import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './test';
@@ -12,9 +12,13 @@ const port = process.env.PORT ?? 3000;
 
 async function getServer() {
     const conn = await createConnection(connectionConfig);
+    console.log('I>Connected');
     app.use('/test', testRoutes);
 
-    routeIntegrator(app, userAPI);
+    //add all the routes of the app into the express application
+    routeIntegrator(app, ...apiList);
+    // routeIntegrator(app, userAPI);
+    // routeIntegrator(app, postAPI);
 
     app.use((req, res, next) => {
         res.status(404).json({ ok: false, status: 'not found' });
@@ -42,7 +46,7 @@ const res = getServer()
         return res;
     })
     .catch(err => {
-        console.error('E>Could not connect to db', err);
+        console.error('E>Could not connect to db:', err?.message ?? err?.msg ?? err?.name ?? 'General error');
     });
 
 export default res;

@@ -7,12 +7,7 @@ import ResponseError from './ResponseError';
  * @param fn Function to wrap
  */
 export default function compose(
-    fn: (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-        repo?: Repository<any>
-    ) => Promise<any>,
+    fn: (req: Request, res: Response, next: NextFunction, repo?: Repository<any>) => Promise<any>,
     repo?: Repository<any>
 ) {
     return async function (req: Request, res: Response, next: NextFunction) {
@@ -27,6 +22,7 @@ export default function compose(
             if (e instanceof ResponseError) {
                 res.status(e.statusCode).json({ ok: false, status: e.message });
             } else {
+                console.log(e);
                 res.status(500).json({ ok: false, status: 'error' });
             }
         }

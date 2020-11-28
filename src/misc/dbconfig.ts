@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
+import { Post } from '../entities/Post';
 import { User } from '../entities/User';
 dotenv.config();
 const config: ConnectionOptions = {
@@ -10,6 +11,6 @@ const config: ConnectionOptions = {
     password: process.env.DBPWD,
     database: process.env.DBDB,
     synchronize: true,
-    entities: [User],
+    entities: [User, Post],
 };
 export default config;
