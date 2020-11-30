@@ -11,17 +11,18 @@ import compose from './compose';
 export default function (app: Application, ...apis: baseAPI[]) {
     for (const api of apis) {
         const { pkg, methods, entity } = api;
+        const controller = new pkg(getRepository(entity));
         methods.forEach(method => {
             // warn if function missing
-            if (!pkg[method.function]) {
-                console.warn('W>Function missing', entity.name, method.function);
+            console.log(controller[method.function]);
+            if (!controller[method.function]) {
+                console.warn('W>Function missing', entity.name, controller.function);
             }
-            //if base entity exists/required
-            if (entity) {
-                app[method.method](method.url, compose(pkg[method.function], getRepository(entity)));
-            } else {
-                app[method.method](method.url, compose(pkg[method.function]));
-            }
+
+            app[method.method](
+                method.url,
+                compose(controller[method.function].bind(controller), getRepository(entity))
+            );
         });
     }
 }

@@ -1,26 +1,29 @@
-import { compare } from 'bcryptjs';
-import { NextFunction, Request, Response } from 'express';
-import { Repository } from 'typeorm';
+import { Request } from 'express';
 import { User } from '../entities/User';
-export async function getOne(req: Request, next: NextFunction, repo: Repository<User>) {
-    const id: number = parseInt(req.params.id);
-    return repo.findOneOrFail({ id }, { select: ['email', 'name', 'role'] });
-}
+import baseAPI from '../misc/baseAPI';
+import BaseController from '../misc/BaseController';
 
-export async function getAll(req: Request, next: NextFunction, repo: Repository<User>) {
-    const val = repo.find({ select: ['email', 'name', 'role'] });
-    return val;
-}
+export default class UserController extends BaseController<User> {
+    async getOne(req: Request) {
+        const id: number = parseInt(req.params.id);
+        return this.repo.findOneOrFail({ id }, { select: ['email', 'name', 'role'] });
+    }
 
-export async function save(req: Request, next: NextFunction, repo: Repository<User>) {
-    const result = await repo.save(req.body as User);
-    return result.id;
-}
+    async getAll(req: Request) {
+        const val = this.repo.find({ select: ['email', 'name', 'role'] });
+        return val;
+    }
 
-export async function remove(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
-    const id: number = parseInt(req.params.id);
-    const userToRemove = await repo.findOneOrFail(id);
-    await repo.remove(userToRemove);
+    async save(req: Request) {
+        const result = await this.repo.save(req.body as User);
+        return result.id;
+    }
+
+    async remove(req: Request) {
+        const id: number = parseInt(req.params.id);
+        const userToRemove = await this.repo.findOneOrFail(id);
+        await this.repo.remove(userToRemove);
+    }
 }
 
 /**
@@ -29,17 +32,34 @@ export async function remove(req: Request, res: Response, next: NextFunction, re
  * @param res res
  * @param next next
  */
-export async function check(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
-    const user = await repo.findOneOrFail({
-        email: req.body.email,
-    });
-    return compare(req.body.pwd, user.pwd);
-}
+// export async function check(req: Request, ) {
+//     const user = await repo.findOneOrFail({
+//         email: req.body.email,
+//     });
+//     return compare(req.body.pwd, user.pwd);
+// }
 
-// export async function checkMiddleWare(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
+// export async function checkMiddleWare(req: Request, res: Response) {
 //     if (await check(req, res, next, repo)) {
 //         next();
 //     } else {
 //         throw new ResponseError('Unauthorized', 403);
 //     }
 // }
+
+export const api: baseAPI = {
+    pkg: UserController,
+    entity: User,
+    methods: [
+        {
+            url: '/user/:id(\\d+)/',
+            method: 'get',
+            function: 'getOne',
+        },
+        {
+            url: '/user',
+            method: 'get',
+            function: 'getAll',
+        },
+    ],
+};

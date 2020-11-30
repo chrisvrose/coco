@@ -2,7 +2,9 @@ import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import apiList from './api';
+// import apiList from './api';
+import { api as postApi } from './controllers/PostController';
+import { api as userApi } from './controllers/UserController';
 import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './test';
@@ -19,7 +21,7 @@ async function getServer() {
     app.use('/test', testRoutes);
 
     //add all the routes of the app into the express application
-    routeIntegrator(app, ...apiList);
+    routeIntegrator(app, postApi, userApi);
     // routeIntegrator(app, userAPI);
     // routeIntegrator(app, postAPI);
 

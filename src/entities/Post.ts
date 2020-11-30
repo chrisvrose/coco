@@ -1,3 +1,4 @@
+import { IsString } from 'class-validator';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
@@ -7,8 +8,10 @@ export class Post {
     id: number;
     @ManyToOne(() => User)
     author: User;
+    @IsString()
     @Column()
     title: string;
+    @IsString()
     @Column()
     content: string;
     @CreateDateColumn()
