@@ -14,15 +14,14 @@ export default function (app: Application, ...apis: baseAPI[]) {
         const controller = new pkg(getRepository(entity));
         methods.forEach(method => {
             // warn if function missing
-            console.log(controller[method.function]);
             if (!controller[method.function]) {
                 console.warn('W>Function missing', entity.name, controller.function);
             }
 
-            app[method.method](
-                method.url,
-                compose(controller[method.function].bind(controller), getRepository(entity))
-            );
+            // Compose this route - handle errors and responses
+            const composedRoute = compose(controller[method.function].bind(controller));
+            // add it as an express route
+            app[method.method](method.url, composedRoute);
         });
     }
 }

@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import { Repository } from 'typeorm';
 import ResponseError from './ResponseError';
 
 /**
  * Wrap database functions with error handling and return
  * @param fn Function to wrap
  */
-export default function compose(fn: (req: Request, repo?: Repository<any>) => Promise<any>, repo?: Repository<any>) {
+export default function compose(fn: (req: Request) => Promise<any>) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await fn(req, repo);
+            const response = await fn(req);
             if (response === null || response === undefined) {
                 res.json({ ok: true });
             } else {
