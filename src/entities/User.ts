@@ -1,5 +1,6 @@
 import { genSalt, hash } from 'bcryptjs';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AuthToken } from './AuthToken';
 
 const bcryptRounds = 10;
 
@@ -24,4 +25,7 @@ export class User {
         const salt = await genSalt(bcryptRounds);
         this.pwd = await hash(this.pwd, salt);
     }
+
+    @OneToMany(() => AuthToken, auth => auth.authtoken)
+    authtokens: AuthToken[];
 }

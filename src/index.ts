@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
+import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import apiList from './api';
@@ -7,6 +8,8 @@ import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './test';
 
 const app = express();
+
+app.use(morgan('tiny'));
 app.use(express.json());
 const port = process.env.PORT ?? 3000;
 

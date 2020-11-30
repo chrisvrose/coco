@@ -12,6 +12,11 @@ const postAPI: baseAPI = {
             function: 'getAll',
         },
         {
+            url: '/post/:id',
+            method: 'get',
+            function: 'getOne',
+        },
+        {
             url: '/post',
             method: 'post',
             function: 'make',

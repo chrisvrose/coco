@@ -6,13 +6,10 @@ import ResponseError from './ResponseError';
  * Wrap database functions with error handling and return
  * @param fn Function to wrap
  */
-export default function compose(
-    fn: (req: Request, res: Response, next: NextFunction, repo?: Repository<any>) => Promise<any>,
-    repo?: Repository<any>
-) {
+export default function compose(fn: (req: Request, repo?: Repository<any>) => Promise<any>, repo?: Repository<any>) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await fn(req, res, next, repo);
+            const response = await fn(req, repo);
             if (response === null || response === undefined) {
                 res.json({ ok: true });
             } else {

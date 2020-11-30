@@ -2,17 +2,17 @@ import { compare } from 'bcryptjs';
 import { NextFunction, Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { User } from '../entities/User';
-export async function getOne(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
+export async function getOne(req: Request, next: NextFunction, repo: Repository<User>) {
     const id: number = parseInt(req.params.id);
     return repo.findOneOrFail({ id }, { select: ['email', 'name', 'role'] });
 }
 
-export async function getAll(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
+export async function getAll(req: Request, next: NextFunction, repo: Repository<User>) {
     const val = repo.find({ select: ['email', 'name', 'role'] });
     return val;
 }
 
-export async function save(req: Request, res: Response, next: NextFunction, repo: Repository<User>) {
+export async function save(req: Request, next: NextFunction, repo: Repository<User>) {
     const result = await repo.save(req.body as User);
     return result.id;
 }
