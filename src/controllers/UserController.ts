@@ -96,5 +96,10 @@ export const api: baseAPI = {
             method: 'post',
             function: 'save',
         },
+        {
+            url: '/auth/login',
+            method: 'post',
+            function: 'login',
+        },
     ],
 };
