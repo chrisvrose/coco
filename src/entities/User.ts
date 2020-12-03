@@ -6,10 +6,10 @@ const bcryptRounds = 10;
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
     @Column()
     name: string;
