@@ -1,12 +1,35 @@
+import { compare } from 'bcryptjs';
+import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
-import { User } from '../entities/User';
+import { LoginUser, RegisterUser, User } from '../entities/User';
 import baseAPI from '../misc/baseAPI';
 import BaseController from '../misc/BaseController';
+import ResponseError from '../misc/ResponseError';
 
 export default class UserController extends BaseController<User> {
+    async login(req: Request) {
+        try {
+            const userpass = plainToClass(LoginUser, req.body);
+            await validateOrReject(userpass);
+            try {
+                const user = await this.repo.findOneOrFail({ where: { email: userpass.email } });
+                await compare(userpass.pwd, user.pwd);
+                return true;
+            } catch {
+                throw new ResponseError('Invalid credentials');
+            }
+        } catch (err) {
+            if (err instanceof ResponseError) {
+                throw err;
+            } else throw new ResponseError('Could not format', 400);
+        }
+        // this.repo.find({where:{email:req}})
+    }
     async getOne(req: Request) {
-        const id: number = parseInt(req.params.id);
-        return this.repo.findOneOrFail({ id }, { select: ['email', 'name', 'role'] });
+        // const id: number = parseInt(req.params.id);
+        const { id } = req.params;
+        return this.repo.findOneOrFail({ where: { id }, select: ['email', 'name', 'role'] });
     }
 
     async getAll(req: Request) {
@@ -15,8 +38,15 @@ export default class UserController extends BaseController<User> {
     }
 
     async save(req: Request) {
-        const result = await this.repo.save(req.body as User);
-        return result.id;
+        const user = plainToClass(RegisterUser, req.body);
+        await validateOrReject(user);
+        try {
+            const result = await this.repo.save(user);
+            return result.id;
+        } catch (e) {
+            console.log(e);
+            throw new ResponseError('could not save');
+        }
     }
 
     async remove(req: Request) {
@@ -52,7 +82,7 @@ export const api: baseAPI = {
     entity: User,
     methods: [
         {
-            url: '/user/:id(\\d+)/',
+            url: '/user/:id/',
             method: 'get',
             function: 'getOne',
         },
@@ -60,6 +90,11 @@ export const api: baseAPI = {
             url: '/user',
             method: 'get',
             function: 'getAll',
+        },
+        {
+            url: '/user',
+            method: 'post',
+            function: 'save',
         },
     ],
 };

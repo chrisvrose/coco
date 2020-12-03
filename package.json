@@ -6,14 +6,16 @@
     "scripts": {
         "test": "ts-mocha test/*.ts",
         "build:ts": "tsc",
-        "start": "ts-node src",
-        "dev": "nodemon --watch 'src/**/*.ts' --ignore 'test/**/*.ts' --exec 'ts-node' src/index.ts"
+        "start": "ts-node src/index.ts",
+        "dev": "nodemon"
     },
     "nodemonConfig": {
+        "ext": "*.ts,*.json",
         "ignore": [
-            "test/*"
+            "test/**/*.ts"
         ],
-        "delay": "2500"
+        "delay": "2500",
+        "exec": "ts-node src/index.ts"
     },
     "prettier": {
         "arrowParens": "avoid",
