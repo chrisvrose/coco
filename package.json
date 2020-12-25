@@ -28,7 +28,7 @@
         "type": "git",
         "url": "git@oc.kekvrose.me:work/courseden-rear.git/"
     },
-    "author": "",
+    "author": "Atreya Bain",
     "license": "MIT",
     "dependencies": {
         "bcryptjs": "^2.4.3",
