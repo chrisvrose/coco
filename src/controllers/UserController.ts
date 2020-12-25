@@ -53,9 +53,9 @@ export default class UserController extends BaseController<User> {
             throw new ResponseError('could not save');
         }
     }
-    @Route('delete', '/user')
+    @Route('delete', '/user/:id')
     async remove(req: Request) {
-        const id: number = parseInt(req.params.id);
+        const { id } = req.params;
         const userToRemove = await this.repo.findOneOrFail(id);
         await this.repo.remove(userToRemove);
     }

@@ -29,6 +29,7 @@ export default class PostController extends BaseController<Post> {
             console.log(post.title);
             return this.repo.save(req.body);
         } catch (e) {
+            console.log(e);
             throw new ResponseError('Could not save user', 400);
         }
     }

@@ -38,14 +38,25 @@ describe('User tests', function () {
         console.log(res.text);
         assert.strictEqual(res.status, 200);
     });
-    it('should make users', async () => {
-        const res = await chai
+    it('should make user', async () => {
+        const resCreated = await chai
             .request((await app).app)
             .post('/user')
             .set('content-type', 'application/json')
-            .send({ email: 'habababa', pwd: 'password', role: 1 });
-        console.log(res.text);
-        assert.strictEqual(res.status, 200);
+            .send({ email: 'habababa@hababa.haba', pwd: 'password', role: 1, name: 'Foo bar' });
+
+        console.log(resCreated.text);
+        assert.strictEqual(resCreated.status, 200, 'add user');
+        const createdBody = JSON.parse(resCreated.text);
+        const insertedID: string = createdBody.response;
+
+        //get
+        const resGet = await chai.request((await app).app).get('/user/' + insertedID);
+        assert.strictEqual(resGet.status, 200, 'get user');
+        //delete
+
+        const resDelete = await chai.request((await app).app).delete('/user/' + insertedID);
+        assert.strictEqual(resDelete.status, 200, 'deleting user');
     });
 });
 
