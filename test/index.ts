@@ -1,4 +1,3 @@
-import 'assert';
 import chai, { assert } from 'chai';
 import chaiHttp from 'chai-http';
 import 'mocha';
@@ -7,10 +6,10 @@ chai.use(chaiHttp);
 
 describe('Sanity', function () {
     it('Server exists', async () => {
-        assert(await app);
+        assert((await app).app);
     });
     it('sanity test', async () => {
-        const res = await chai.request(await app).get('/test');
+        const res = await chai.request((await app).app).get('/test');
         assert.strictEqual(res.status, 200);
         const resParsed = JSON.parse(res.text);
         assert.strictEqual(resParsed.ok, true);
@@ -18,14 +17,14 @@ describe('Sanity', function () {
     });
 
     it('working status codes', async () => {
-        const res = await chai.request(await app).get('/test/teapot');
+        const res = await chai.request((await app).app).get('/test/teapot');
         assert.strictEqual(res.status, 418);
         const resParsed = JSON.parse(res.text);
         assert.strictEqual(resParsed.ok, true);
         assert(resParsed.status);
     });
     it('working not found', async () => {
-        const res = await chai.request(await app).get('/test/noop');
+        const res = await chai.request((await app).app).get('/test/noop');
         assert.strictEqual(res.status, 404);
         const resParsed = JSON.parse(res.text);
         assert.strictEqual(resParsed.ok, false);
@@ -35,17 +34,23 @@ describe('Sanity', function () {
 
 describe('User tests', function () {
     it('should get users', async () => {
-        const res = await chai.request(await app).get('/user');
+        const res = await chai.request((await app).app).get('/user');
         console.log(res.text);
         assert.strictEqual(res.status, 200);
     });
     it('should make users', async () => {
         const res = await chai
-            .request(await app)
+            .request((await app).app)
             .post('/user')
             .set('content-type', 'application/json')
             .send({ email: 'habababa', pwd: 'password', role: 1 });
         console.log(res.text);
         assert.strictEqual(res.status, 200);
+    });
+});
+
+describe('Close db', function () {
+    it('Close server', async () => {
+        await (await app).close();
     });
 });

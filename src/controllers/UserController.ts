@@ -3,11 +3,14 @@ import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 import { LoginUser, RegisterUser, User } from '../entities/User';
-import baseAPI from '../misc/baseAPI';
 import BaseController from '../misc/BaseController';
+import ControllerEntity from '../misc/decorators/ControllerEntity';
+import Route from '../misc/decorators/Route';
 import ResponseError from '../misc/ResponseError';
 
+@ControllerEntity(User)
 export default class UserController extends BaseController<User> {
+    @Route('post', '/auth/login')
     async login(req: Request) {
         try {
             const userpass = plainToClass(LoginUser, req.body);
@@ -26,17 +29,19 @@ export default class UserController extends BaseController<User> {
         }
         // this.repo.find({where:{email:req}})
     }
+
+    @Route('get', '/user/:id')
     async getOne(req: Request) {
         // const id: number = parseInt(req.params.id);
         const { id } = req.params;
         return this.repo.findOneOrFail({ where: { id }, select: ['email', 'name', 'role'] });
     }
-
+    @Route('get', '/user')
     async getAll(req: Request) {
         const val = this.repo.find({ select: ['email', 'name', 'role'] });
         return val;
     }
-
+    @Route('post', '/user')
     async save(req: Request) {
         const user = plainToClass(RegisterUser, req.body);
         await validateOrReject(user);
@@ -48,58 +53,10 @@ export default class UserController extends BaseController<User> {
             throw new ResponseError('could not save');
         }
     }
-
+    @Route('delete', '/user')
     async remove(req: Request) {
         const id: number = parseInt(req.params.id);
         const userToRemove = await this.repo.findOneOrFail(id);
         await this.repo.remove(userToRemove);
     }
 }
-
-/**
- * check password
- * @param req req
- * @param res res
- * @param next next
- */
-// export async function check(req: Request, ) {
-//     const user = await repo.findOneOrFail({
-//         email: req.body.email,
-//     });
-//     return compare(req.body.pwd, user.pwd);
-// }
-
-// export async function checkMiddleWare(req: Request, res: Response) {
-//     if (await check(req, res, next, repo)) {
-//         next();
-//     } else {
-//         throw new ResponseError('Unauthorized', 403);
-//     }
-// }
-
-export const api: baseAPI = {
-    pkg: UserController,
-    entity: User,
-    methods: [
-        {
-            url: '/user/:id/',
-            method: 'get',
-            function: 'getOne',
-        },
-        {
-            url: '/user',
-            method: 'get',
-            function: 'getAll',
-        },
-        {
-            url: '/user',
-            method: 'post',
-            function: 'save',
-        },
-        {
-            url: '/auth/login',
-            method: 'post',
-            function: 'login',
-        },
-    ],
-};

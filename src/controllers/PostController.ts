@@ -2,22 +2,26 @@ import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 import { Post } from '../entities/Post';
-import baseAPI from '../misc/baseAPI';
 import BaseController from '../misc/BaseController';
+import ControllerEntity from '../misc/decorators/ControllerEntity';
+import Route from '../misc/decorators/Route';
 import ResponseError from '../misc/ResponseError';
 
+@ControllerEntity(Post)
 export default class PostController extends BaseController<Post> {
+    @Route('get', '/post')
     async getAll(req: Request) {
         // const id = parseInt(req.params.id);
         return this.repo.find();
     }
 
+    @Route('get', '/post/:id')
     async getOne(req: Request) {
         const res = await this.repo.findOne(parseInt(req.params.id));
         if (res) return res;
         else throw new ResponseError('Could not get', 404);
     }
-
+    @Route('post', '/post')
     async make(req: Request) {
         try {
             const post = plainToClass(Post, req.body);
@@ -29,24 +33,3 @@ export default class PostController extends BaseController<Post> {
         }
     }
 }
-export const api: baseAPI = {
-    pkg: PostController,
-    entity: Post,
-    methods: [
-        {
-            url: '/post',
-            method: 'get',
-            function: 'getAll',
-        },
-        {
-            url: '/post/:id',
-            method: 'get',
-            function: 'getOne',
-        },
-        {
-            url: '/post',
-            method: 'post',
-            function: 'make',
-        },
-    ],
-};

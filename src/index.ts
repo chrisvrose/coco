@@ -3,8 +3,8 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 // import apiList from './api';
-import { api as postApi } from './controllers/PostController';
-import { api as userApi } from './controllers/UserController';
+import PostController from './controllers/PostController';
+import UserController from './controllers/UserController';
 import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './test';
@@ -21,7 +21,8 @@ async function getServer() {
     app.use('/test', testRoutes);
 
     //add all the routes of the app into the express application
-    routeIntegrator(app, postApi, userApi);
+    routeIntegrator(app, PostController);
+    routeIntegrator(app, UserController);
     // routeIntegrator(app, userAPI);
     // routeIntegrator(app, postAPI);
 
@@ -42,16 +43,12 @@ async function getServer() {
         console.error('E>', err);
     });
 
-    return app.listen(port);
+    return { app: app.listen(port), close: async () => conn.close() };
 }
 
-const res = getServer()
-    .then(res => {
-        // console.log('I>Preparing');
-        return res;
-    })
-    .catch(err => {
-        console.error('E>Could not connect to db:', err?.message ?? err?.msg ?? err?.name ?? 'General error');
-    });
+const res = getServer();
+res.catch(err => {
+    console.error('E>Could not connect to db:', err?.message ?? err?.msg ?? err?.name ?? 'General error');
+});
 
 export default res;
