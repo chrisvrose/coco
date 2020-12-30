@@ -12,6 +12,7 @@ services:
             - DBUSER
             - DBPWD
             - DBHOST=pgdb
+            - ACCESS_TOKEN_SECRET
         ports:
             - 3000:3000
     pgdb:

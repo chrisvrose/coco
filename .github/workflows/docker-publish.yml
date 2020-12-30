@@ -19,6 +19,7 @@ env:
     DBPWD: password
     DBUSER: another
     DBROOTPWD: rootpwd
+    ACCESS_TOKEN_SECRET: mysecret
 
 jobs:
     # Run tests.
