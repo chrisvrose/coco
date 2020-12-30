@@ -36,7 +36,6 @@ describe('User Controller', function () {
         assert(body, 'body exists');
         assert.strictEqual(typeof body.response, 'string', 'Expected string');
         userid = body.response;
-        console.log(text);
     });
     it('get created user', async function () {
         const res = await chai.request(server).get('/user/' + userid);
