@@ -13,6 +13,7 @@ services:
             - DBUSER
             - DBPWD
             - DBHOST=pgdbtest
+            - ACCESS_TOKEN_SECRET
     testdb:
         image: postgres
         hostname: pgdbtest
