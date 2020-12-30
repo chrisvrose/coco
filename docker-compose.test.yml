@@ -1,31 +1,26 @@
 version: '3'
 
 services:
-    web:
+    sut:
         build: .
-        links:
-            - pgdb:pgdb
+        command: npm test
         depends_on:
-            - pgdb
+            - testdb
+        links:
+            - testdb
         environment:
             - DBDB
             - DBUSER
             - DBPWD
-            - DBHOST=pgdb
-    pgdb:
+            - DBHOST=pgdbtest
+    testdb:
         image: postgres
-        hostname: pgdb
-        restart: always
+        hostname: pgdbtest
         ports:
             - 5432:5432
-        volumes:
-            - coursedenpgdata:/var/lib/postgresql/data
         environment:
             - PGDATA=/var/lib/postgresql/data/pgdata
             - POSTGRES_DB=${DBDB}
             - POSTGRES_USER=${DBUSER}
             - POSTGRES_PASSWORD=${DBPWD}
             - PGPASSWORD=${DBROOTPWD}
-
-volumes:
-    coursedenpgdata:

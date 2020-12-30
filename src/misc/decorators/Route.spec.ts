@@ -2,6 +2,9 @@ import { assert } from 'chai';
 import 'reflect-metadata';
 import Route, { routeMetadata } from './Route';
 
+/**
+ * @file Test for the Route decorator
+ */
 class testClass {
     @Route('get', '/url1')
     method1() {

@@ -1,3 +1,6 @@
+/**
+ * @file Test for the Controller decorator
+ */
 import { assert } from 'chai';
 import 'reflect-metadata';
 import ControllerEntity from './ControllerEntity';
