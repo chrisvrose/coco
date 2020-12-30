@@ -16,6 +16,10 @@ on:
 env:
     # TODO: Change variable to your image's name.
     IMAGE_NAME: coco
+    DBDB: mydb
+    DBPWD: password
+    DBUSER: another
+    DBROOTPWD: rootpwd
 
 jobs:
     # Run tests.
