@@ -14,6 +14,7 @@ describe('Base Routes test', function () {
         server = application.start();
     });
     after(async function () {
+        server.close();
         await application.close();
     });
 

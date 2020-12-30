@@ -1,7 +1,6 @@
 import { genSalt, hash } from 'bcryptjs';
 import { IsEmail, IsString, Length } from 'class-validator';
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { AuthToken } from './AuthToken';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 const bcryptRounds = 10;
 
@@ -28,9 +27,6 @@ export class User {
         const salt = await genSalt(bcryptRounds);
         this.pwd = await hash(this.pwd, salt);
     }
-
-    @OneToMany(() => AuthToken, auth => auth.authtoken)
-    authtokens: AuthToken[];
 }
 
 export class LoginUser {

@@ -32,6 +32,7 @@ describe('Route integrator', function () {
         application = await Application();
     });
     after(async function () {
+        server.close();
         return application.close();
     });
     it('Can add methods (fake)', async function () {
