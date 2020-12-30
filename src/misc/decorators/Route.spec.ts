@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import 'reflect-metadata';
-import Route from './Route';
+import Route, { routeMetadata } from './Route';
 
 class testClass {
     @Route('get', '/url1')
@@ -25,13 +25,11 @@ describe('Route MiddleWare', function () {
     });
     it('test class should have decorator metadata', async function () {
         const test = new testClass();
-
-        const loc1 = Reflect.getMetadata('routeMethod', test, 'method1');
-        assert.exists(loc1?.verb === 'get', 'method1 was get');
-        assert.exists(loc1?.path === '/url1', 'method1 was /url1');
-
-        const loc2 = Reflect.getMetadata('routeMethod', test, 'method2');
-        assert.exists(loc2?.verb === 'post', 'method2 was post');
-        assert.exists(loc2?.path === '/url2', 'method2 was /url2');
+        const metadata: routeMetadata[] = Reflect.getMetadata('routeMethods', test) ?? [];
+        assert.strictEqual(metadata.length, 2, '2 routes');
+        assert.strictEqual(metadata[0].verb, 'get', 'Route 1 has get');
+        assert.strictEqual(metadata[0].path, '/url1', 'Route 1 has url1');
+        assert.strictEqual(metadata[1].verb, 'post', 'Route 2 has post');
+        assert.strictEqual(metadata[1].path, '/url2', 'Route 2 has url2');
     });
 });

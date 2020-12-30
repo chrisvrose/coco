@@ -1,54 +1,11 @@
-import express, { NextFunction, Request, Response } from 'express';
-import morgan from 'morgan';
-import 'reflect-metadata';
-import { createConnection } from 'typeorm';
-// import apiList from './api';
-import PostController from './controllers/PostController';
-import UserController from './controllers/UserController';
-import connectionConfig from './misc/dbconfig';
-import routeIntegrator from './misc/routeIntegrator';
-import testRoutes from './test';
+import Application from './Application';
 
-const app = express();
+console.log('>Starting Server as main');
+const port = parseInt(process.env.PORT || '3000');
+const res = Application(port, true);
 
-app.use(morgan('tiny'));
-app.use(express.json());
-const port = process.env.PORT ?? 3000;
-
-async function getServer() {
-    const conn = await createConnection(connectionConfig);
-    console.log('I>Connected');
-    app.use('/test', testRoutes);
-
-    //add all the routes of the app into the express application
-    routeIntegrator(app, PostController);
-    routeIntegrator(app, UserController);
-    // routeIntegrator(app, userAPI);
-    // routeIntegrator(app, postAPI);
-
-    app.use((req, res, next) => {
-        res.status(404).json({ ok: false, status: 'not found' });
-    });
-
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        if (!res.headersSent) {
-            res.status(500).json({
-                ok: false,
-                status: err.toString(),
-            });
-        } else {
-            console.error('E(error):Did not send error');
-            res.end();
-        }
-        console.error('E>', err);
-    });
-
-    return { app: app.listen(port), close: async () => conn.close() };
-}
-
-const res = getServer();
-res.catch(err => {
+res.then(server => {
+    console.log('Server running on port:', port);
+}).catch(err => {
     console.error('E>Could not connect to db:', err?.message ?? err?.msg ?? err?.name ?? 'General error');
 });
-
-export default res;

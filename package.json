@@ -4,7 +4,7 @@
     "description": "",
     "main": "src",
     "scripts": {
-        "test": "find ./src -name '*.spec.ts' | xargs ts-mocha test/index.ts",
+        "test": "find ./src -name '*.spec.ts' | xargs ts-mocha test/*.ts",
         "build:ts": "tsc",
         "start": "ts-node src/index.ts",
         "dev": "nodemon"
