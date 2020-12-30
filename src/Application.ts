@@ -3,11 +3,7 @@ import { Server } from 'http';
 import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-// import apiList from './api';
-import PostController from './controllers/PostController';
-import UserController from './controllers/UserController';
 import connectionConfig from './misc/dbconfig';
-import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './testRoutes';
 /**
  * Obtain a server module
@@ -26,10 +22,6 @@ export default async function getServer(port: number = 3000, doLogs: boolean = f
     app.use('/test', testRoutes);
 
     //add all the routes of the app into the express application
-    routeIntegrator(app, PostController);
-    routeIntegrator(app, UserController);
-    // routeIntegrator(app, userAPI);
-    // routeIntegrator(app, postAPI);
 
     // const server = app.listen(port);
     return {
@@ -59,17 +51,6 @@ export default async function getServer(port: number = 3000, doLogs: boolean = f
          */
         close: async () => {
             return conn.close();
-            // return new Promise<void>((res, rej) => {
-            //     server.close(err => {
-            //         if (err) {
-            //             rej(err);
-            //             return;
-            //         }
-            //         conn.close()
-            //             .then(() => res())
-            //             .catch(reason => rej(reason));
-            //     });
-            // });
         },
     };
 }

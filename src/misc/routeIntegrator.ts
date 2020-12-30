@@ -8,8 +8,7 @@ export default function routeIntegrator<T extends Object>(app: Application, cont
     let baseObj: BaseController<T> | Controller;
     const entity: EntityTarget<T> = Reflect.getMetadata('controllerEntity', controller);
     if (entity) {
-        console.log('a1');
-        console.log('entity', entity);
+        // console.log('a1');
         if (entity === undefined) {
             console.warn('W>Missing class decorator');
         }

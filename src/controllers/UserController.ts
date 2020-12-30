@@ -2,10 +2,13 @@ import { compare } from 'bcryptjs';
 import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
+import { getRepository } from 'typeorm';
+import { AuthToken } from '../entities/AuthToken';
 import { LoginUser, RegisterUser, User } from '../entities/User';
 import BaseController from '../misc/BaseController';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
+import generateToken from '../misc/jwt/generateToken';
 import ResponseError from '../misc/ResponseError';
 
 @ControllerEntity(User)
@@ -17,8 +20,12 @@ export default class UserController extends BaseController<User> {
             await validateOrReject(userpass);
             try {
                 const user = await this.repo.findOneOrFail({ where: { email: userpass.email } });
+                const authtoken = new AuthToken();
+                authtoken.authtoken = generateToken({ user: user.id });
+                authtoken.user = user;
+                await getRepository(AuthToken).save(authtoken);
                 await compare(userpass.pwd, user.pwd);
-                return true;
+                return authtoken.authtoken;
             } catch {
                 throw new ResponseError('Invalid credentials');
             }
