@@ -7,7 +7,7 @@ services:
         depends_on:
             - testdb
         links:
-            - testdb
+            - testdb:pgdbtest
         environment:
             - DBDB
             - DBUSER

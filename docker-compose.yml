@@ -12,6 +12,8 @@ services:
             - DBUSER
             - DBPWD
             - DBHOST=pgdb
+        ports:
+            - 3000:3000
     pgdb:
         image: postgres
         hostname: pgdb
