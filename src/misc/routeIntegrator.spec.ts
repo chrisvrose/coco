@@ -13,14 +13,14 @@ chai.use(chaiHttp);
 @ControllerEntity(Post)
 class myTestController extends BaseController<Post> {
     @Route('get', '/get1')
-    fakeRoute() {
+    async fakeRoute() {
         return 1;
     }
     @Route('post', '/post1')
-    someOtherRoute() {
+    async someOtherRoute() {
         return 5;
     }
-    someAnotherRoute() {
+    async someAnotherRoute() {
         return 6;
     }
 }

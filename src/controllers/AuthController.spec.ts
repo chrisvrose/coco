@@ -2,6 +2,7 @@ import { assert } from 'chai';
 import { Connection, createConnection } from 'typeorm';
 import { AuthToken } from '../entities/AuthToken';
 import config from '../misc/dbconfig';
+import { routeMetadata } from '../misc/decorators/Route';
 import AuthController from './AuthController';
 
 // import assert from 'assert';
@@ -16,9 +17,8 @@ describe('AuthController', function () {
     it('should have basic work', async () => {
         const authController = new AuthController(conn.getRepository(AuthToken));
         const res = await authController.getOne();
-        const data = Reflect.getMetadata('routeMethod', authController, 'getOne');
+        const data: routeMetadata[] = Reflect.getMetadata('routeMethods', authController);
         //TODO FIN
-        assert.equal(res, 1, 'one');
-        assert.equal(data.verb, 'get', 'correct verb get');
+        assert.strictEqual(data.length, 2, 'Two routes');
     });
 });

@@ -1,6 +1,5 @@
 import Application from './Application';
 
-console.log('>Starting Server as main');
 const port = parseInt(process.env.PORT || '3000');
 const res = Application(port, true);
 

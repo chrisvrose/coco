@@ -8,7 +8,7 @@ import PostController from './controllers/PostController';
 import UserController from './controllers/UserController';
 import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
-import testRoutes from './test';
+import testRoutes from './testRoutes';
 /**
  * Obtain a server module
  */

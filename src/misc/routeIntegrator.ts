@@ -1,21 +1,28 @@
 import { Application } from 'express';
 import { EntityTarget, getRepository } from 'typeorm';
-import { baseControllerClass } from './BaseController';
+import BaseController, { baseControllerClass, Controller } from './BaseController';
 import compose from './compose';
 import { routeMetadata } from './decorators/Route';
 
-export default function integrator<T extends Object>(app: Application, controller: baseControllerClass<T>) {
-    const entity: EntityTarget<T> = Reflect?.getMetadata('controllerEntity', controller);
+export default function routeIntegrator<T extends Object>(app: Application, controller: baseControllerClass<T>) {
+    let baseObj: BaseController<T> | Controller;
+    const entity: EntityTarget<T> = Reflect.getMetadata('controllerEntity', controller);
     if (entity) {
-        const controllerObj = new controller(getRepository(entity));
-        const methods: routeMetadata[] = Reflect.getMetadata('routeMethods', controllerObj) ?? [];
-        for (const method of methods) {
-            // console.log('I>Adding', method, ((controllerObj as any)[method.method as any] as Function).toString());
-            const composedRoute = compose((controllerObj as any)[method.method as any].bind(controllerObj));
-            (app as any)[method.verb](method.path, composedRoute);
+        console.log('a1');
+        console.log('entity', entity);
+        if (entity === undefined) {
+            console.warn('W>Missing class decorator');
         }
-        // console.log('I>Done,status', app._router.stack);
+        baseObj = new controller(getRepository(entity));
     } else {
-        console.warn('W>', controller.name, ' missing decorator for controller model');
+        console.log('a2');
+        // TODO find a better way to work with a controller
+        baseObj = new (controller as any)();
+    }
+    // const baseObj = new controller(getRepository(entity));
+    const methods: routeMetadata[] = Reflect.getMetadata('routeMethods', baseObj) ?? [];
+    for (const method of methods) {
+        const composedRoute = compose((baseObj as any)[method.method as any].bind(baseObj));
+        (app as any)[method.verb](method.path, composedRoute);
     }
 }
