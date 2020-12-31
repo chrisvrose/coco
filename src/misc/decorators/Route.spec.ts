@@ -35,4 +35,5 @@ describe('Route MiddleWare', function () {
         assert.strictEqual(metadata[1].verb, 'post', 'Route 2 has post');
         assert.strictEqual(metadata[1].path, '/url2', 'Route 2 has url2');
     });
+    it('should have functioning auth middleware');
 });
