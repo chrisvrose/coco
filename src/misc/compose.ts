@@ -1,6 +1,6 @@
 import { ValidationError } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
-import ResponseError from './ResponseError';
+import ResponseError from './error/ResponseError';
 
 /**
  * Wrap database functions with error handling and return

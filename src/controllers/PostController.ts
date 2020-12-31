@@ -5,7 +5,7 @@ import { Post } from '../entities/Post';
 import BaseController from '../misc/BaseController';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
-import ResponseError from '../misc/ResponseError';
+import ResponseError from '../misc/error/ResponseError';
 
 @ControllerEntity(Post)
 export default class PostController extends BaseController<Post> {

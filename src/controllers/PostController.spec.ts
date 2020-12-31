@@ -5,5 +5,6 @@ import 'reflect-metadata';
 // import chaiHttp from 'chai-http';
 
 describe('Post Controller', function () {
-    it('should work');
+    it('should get all posts');
+    it('should fail without auth');
 });

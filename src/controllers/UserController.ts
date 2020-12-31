@@ -8,8 +8,8 @@ import { LoginUser, RegisterUser, User } from '../entities/User';
 import BaseController from '../misc/BaseController';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
+import ResponseError from '../misc/error/ResponseError';
 import generateToken from '../misc/jwt/generateToken';
-import ResponseError from '../misc/ResponseError';
 
 @ControllerEntity(User)
 export default class UserController extends BaseController<User> {

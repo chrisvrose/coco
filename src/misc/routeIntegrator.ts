@@ -25,3 +25,5 @@ export default function routeIntegrator<T extends Object>(app: Application, cont
         (app as any)[method.verb](method.path, composedRoute);
     }
 }
+
+export const ControllerIntegrator = routeIntegrator;
