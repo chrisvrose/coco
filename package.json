@@ -6,7 +6,8 @@
     "scripts": {
         "test": "find ./src -name '*.spec.ts' | xargs ts-mocha test/*.ts",
         "start": "ts-node src/index.ts",
-        "dev": "nodemon"
+        "dev": "nodemon",
+        "doc": "typedoc --tsconfig tsconfig.json"
     },
     "nodemonConfig": {
         "ext": "*.ts,*.json",
@@ -54,6 +55,7 @@
         "dotenv": "^8.2.0",
         "mocha": "^8.2.1",
         "ts-mocha": "^8.0.0",
+        "typedoc": "^0.20.5",
         "typescript": "^4.0.5"
     }
 }
