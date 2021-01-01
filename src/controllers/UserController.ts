@@ -16,7 +16,7 @@ export default class UserController extends BaseController<User> {
     @Route('post', '/auth/login')
     async login(req: Request) {
         try {
-            const userpass = plainToClass(LoginUser, req.body);
+            const userpass = plainToClass(LoginUser, req.body, { excludeExtraneousValues: true });
             await validateOrReject(userpass);
             try {
                 const user = await this.repo.findOneOrFail({ where: { email: userpass.email } });
@@ -50,9 +50,11 @@ export default class UserController extends BaseController<User> {
     }
     @Route('post', '/user')
     async save(req: Request) {
-        const user = plainToClass(RegisterUser, req.body);
+        const user = plainToClass(RegisterUser, req.body, { excludeExtraneousValues: true });
+        console.log('I>NEW USER after conversion', user);
         await validateOrReject(user);
         try {
+            console.log('I>new user', user);
             const result = await this.repo.save(user);
             return result.id;
         } catch (e) {

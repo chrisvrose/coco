@@ -1,4 +1,5 @@
 import { genSalt, hash } from 'bcryptjs';
+import { Expose } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -30,10 +31,12 @@ export class User {
 }
 
 export class LoginUser {
+    @Expose()
     @IsEmail()
     email: string;
 
     // @Length(8)
+    @Expose()
     @MinLength(8)
     pwd: string;
 }
@@ -42,12 +45,13 @@ export class LoginUser {
  * Validation pair
  */
 export class RegisterUser extends LoginUser {
+    @Expose()
     @IsString()
     name: string;
-
+    @Expose()
     @IsEmail()
     email: string;
-
+    @Expose()
     @MinLength(8)
     pwd: string;
 }

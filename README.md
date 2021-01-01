@@ -4,6 +4,24 @@
 
 Opinionated attempt at dev.
 
+## What?
+
+An application that should also yield a collection of highly reusable server components.
+
+## Why
+
+An exploration of tests+ORMs+AOP.
+
+## Progress
+
+- [X] Users
+- [X] Authtokens
+- [X] Decorators and Middleware for routes, controllers and models
+- [ ] Authorization middleware
+- [ ] Test resource (Posts)
+- [ ] ???
+
+
 ## API standard response
 
 ### Standard

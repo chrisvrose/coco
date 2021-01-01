@@ -27,7 +27,7 @@ describe('User Controller', function () {
         const res = await chai
             .request(server)
             .post('/user')
-            .send({ email: 'foo@bar.baz', name: 'Foo bar', pwd: 'password', role: 1 });
+            .send({ email: 'foo@bar.baz', name: 'Foo bar', pwd: 'password' });
 
         const text = res.text;
         assert.strictEqual(res.status, 200);

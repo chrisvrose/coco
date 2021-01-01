@@ -25,7 +25,12 @@ export default function routeIntegrator<T extends Object>(app: Application, ...c
         const methods: routeMetadata[] = Reflect.getMetadata('routeMethods', baseObj) ?? [];
         for (const method of methods) {
             const composedRoute = compose((baseObj as any)[method.method as any].bind(baseObj));
-            (app as any)[method.verb](method.path, composedRoute);
+            if (typeof method.authMiddleWare === 'function') {
+                // console.log('I>Added auth route');
+                (app as any)[method.verb](method.path, method.authMiddleWare, composedRoute);
+            } else {
+                (app as any)[method.verb](method.path, composedRoute);
+            }
         }
     }
 }

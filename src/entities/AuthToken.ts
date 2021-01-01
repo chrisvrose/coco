@@ -9,6 +9,7 @@ import { User } from './User';
 export class AuthToken {
     @PrimaryColumn()
     authtoken: string;
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    //whenever we deal with atokens, we need users anyways to check priviledge
+    @ManyToOne(() => User, { onDelete: 'CASCADE', eager: true })
     user: User;
 }

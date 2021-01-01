@@ -9,9 +9,20 @@ import { authRole } from './auth';
 chai.use(chaiHttp);
 
 class fakeController extends Controller {
-    @Route('get', '/fakeauthable', authRole(1))
+    //strictly for 1 only
+    @Route('get', '/fakeauthable1', authRole(0))
     async one42() {
         return 42;
+    }
+    //0 and above
+    @Route('get', '/fakeauthable2', authRole(0, true))
+    async one43() {
+        return 43;
+    }
+    //two exactly
+    @Route('get', '/fakeauthable3', authRole(1))
+    async one44() {
+        return 44;
     }
 }
 
@@ -22,7 +33,7 @@ describe('Authenticators', function () {
     let atoken: string;
     before(async function () {
         //add user controller directly
-        application = await Application(3000, false, UserController);
+        application = await Application(3000, false, UserController, fakeController);
         server = application.start();
     });
     after(async function () {
@@ -51,12 +62,26 @@ describe('Authenticators', function () {
         atoken = resJson.response;
         assert.typeOf(atoken, 'string', 'Atokens should be strings');
     });
-    it('should assert role 1', async function () {});
+    it('should not work not logged in', async function () {
+        const res = await chai.request(server).get('/fakeauthable1');
+        assert.strictEqual(res.status, 403);
+    });
+    it('= check', async function () {
+        const res = await chai.request(server).get('/fakeauthable1').set('authentication', `bearer ${atoken}`);
+        assert.strictEqual(res.status, 200);
+    });
+
+    it('= check, for incorrect role should yield 403', async function () {
+        const res = await chai.request(server).get('/fakeauthable3').set('authentication', `bearer ${atoken}`);
+        assert.strictEqual(res.status, 403);
+    });
+    it('>= check', async function () {
+        const res = await chai.request(server).get('/fakeauthable2').set('authentication', `bearer ${atoken}`);
+        assert.strictEqual(res.status, 200);
+    });
 
     it('remove user', async function () {
         const res = await chai.request(server).delete(`/user/${userid}`);
         assert.strictEqual(res.status, 200, 'Error' + res.text);
     });
-
-    it('Role ">="');
 });
