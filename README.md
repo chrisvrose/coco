@@ -17,7 +17,7 @@ An exploration of tests+ORMs+AOP.
 - [X] Users
 - [X] Authtokens
 - [X] Decorators and Middleware for routes, controllers and models
-- [ ] Authorization middleware
+- [X] Authorization middleware
 - [ ] Test resource (Posts)
 - [ ] ???
 

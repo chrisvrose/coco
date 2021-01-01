@@ -2,8 +2,8 @@ import chai, { assert } from 'chai';
 import chaiHttp from 'chai-http';
 import { Server } from 'http';
 import UserController from '../controllers/UserController';
-import { Controller } from '../misc/BaseController';
 import Route from '../misc/decorators/Route';
+import { Controller } from '../misc/types/BaseController';
 import Application, { appliance } from './../Application';
 import { authRole } from './auth';
 chai.use(chaiHttp);
@@ -55,7 +55,7 @@ describe('Authenticators', function () {
         userid = body.response;
     });
     it('Login', async function () {
-        const res = await chai.request(server).post('/auth/login').send({ email: 'foo@bar.baz', pwd: 'password' });
+        const res = await chai.request(server).post('/auth').send({ email: 'foo@bar.baz', pwd: 'password' });
         assert.strictEqual(res.status, 200);
         const resJson = JSON.parse(res.text);
         // console.log(resJson);
@@ -67,21 +67,21 @@ describe('Authenticators', function () {
         assert.strictEqual(res.status, 403);
     });
     it('= check', async function () {
-        const res = await chai.request(server).get('/fakeauthable1').set('authentication', `bearer ${atoken}`);
+        const res = await chai.request(server).get('/fakeauthable1').set('authorization', `bearer ${atoken}`);
         assert.strictEqual(res.status, 200);
     });
 
     it('= check, for incorrect role should yield 403', async function () {
-        const res = await chai.request(server).get('/fakeauthable3').set('authentication', `bearer ${atoken}`);
+        const res = await chai.request(server).get('/fakeauthable3').set('authorization', `bearer ${atoken}`);
         assert.strictEqual(res.status, 403);
     });
     it('>= check', async function () {
-        const res = await chai.request(server).get('/fakeauthable2').set('authentication', `bearer ${atoken}`);
+        const res = await chai.request(server).get('/fakeauthable2').set('authorization', `bearer ${atoken}`);
         assert.strictEqual(res.status, 200);
     });
 
     it('remove user', async function () {
-        const res = await chai.request(server).delete(`/user/${userid}`);
+        const res = await chai.request(server).delete(`/user/${userid}`).set('authorization', `bearer ${atoken}`);
         assert.strictEqual(res.status, 200, 'Error' + res.text);
     });
 });

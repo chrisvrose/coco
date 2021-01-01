@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { AuthToken } from '../entities/AuthToken';
 
 /**
- *
+ * passing (0,true) is just a simple auth for self
  * @param role The role identifier
  * @param geq Whether to allow greater role values too. False by default
  */
@@ -14,7 +14,7 @@ export function authRole(role: number, geq: boolean = false) {
             //get the repo
             const repo = getRepository<AuthToken>(AuthToken);
             //
-            const tokenStr = req.header('authentication')?.split(' ')[1];
+            const tokenStr = req.header('authorization')?.split(' ')[1];
             assert(typeof tokenStr === 'string');
             // FIXME get the token
             const token = await repo.findOneOrFail({ where: { authtoken: tokenStr } });

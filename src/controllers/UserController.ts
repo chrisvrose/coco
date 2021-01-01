@@ -5,29 +5,35 @@ import { Request } from 'express';
 import { getRepository } from 'typeorm';
 import { AuthToken } from '../entities/AuthToken';
 import { LoginUser, RegisterUser, User } from '../entities/User';
-import BaseController from '../misc/BaseController';
+import { authRole } from '../middleware/auth';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
 import ResponseError from '../misc/error/ResponseError';
 import generateToken from '../misc/jwt/generateToken';
+import BaseController from '../misc/types/BaseController';
 
 @ControllerEntity(User)
 export default class UserController extends BaseController<User> {
-    @Route('post', '/auth/login')
+    @Route('post', '/auth')
     async login(req: Request) {
         try {
             const userpass = plainToClass(LoginUser, req.body, { excludeExtraneousValues: true });
             await validateOrReject(userpass);
             try {
                 const user = await this.repo.findOneOrFail({ where: { email: userpass.email } });
+                // validate pwd
+                await compare(userpass.pwd, user.pwd);
+                // generate new authtoken
                 const authtoken = new AuthToken();
                 authtoken.authtoken = generateToken({ user: user.id });
                 authtoken.user = user;
+                // save it
                 await getRepository(AuthToken).save(authtoken);
-                await compare(userpass.pwd, user.pwd);
+                //ensure
                 return authtoken.authtoken;
             } catch {
-                throw new ResponseError('Invalid credentials');
+                // console.log('login error', e);
+                throw new ResponseError('Invalid credentials', 401);
             }
         } catch (err) {
             if (err instanceof ResponseError) {
@@ -51,10 +57,10 @@ export default class UserController extends BaseController<User> {
     @Route('post', '/user')
     async save(req: Request) {
         const user = plainToClass(RegisterUser, req.body, { excludeExtraneousValues: true });
-        console.log('I>NEW USER after conversion', user);
+        // console.log('I>NEW USER after conversion', user);
         await validateOrReject(user);
         try {
-            console.log('I>new user', user);
+            // console.log('I>new user', user);
             const result = await this.repo.save(user);
             return result.id;
         } catch (e) {
@@ -62,7 +68,13 @@ export default class UserController extends BaseController<User> {
             throw new ResponseError('could not save');
         }
     }
-    @Route('delete', '/user/:id')
+    //logout
+    //TODO implement
+    // @Route('delete', '/auth', authRole(0, true))
+    // async logout(req: Request) {
+    //     // await
+    // }
+    @Route('delete', '/user/:id', authRole(0, true))
     async remove(req: Request) {
         const { id } = req.params;
         const userToRemove = await this.repo.findOneOrFail(id);

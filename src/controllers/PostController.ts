@@ -2,10 +2,10 @@ import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 import { Post } from '../entities/Post';
-import BaseController from '../misc/BaseController';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
 import ResponseError from '../misc/error/ResponseError';
+import BaseController from '../misc/types/BaseController';
 
 @ControllerEntity(Post)
 export default class PostController extends BaseController<Post> {

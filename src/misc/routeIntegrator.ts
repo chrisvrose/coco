@@ -1,8 +1,8 @@
 import { Application } from 'express';
 import { EntityTarget, getRepository } from 'typeorm';
-import BaseController, { Controller, controllerClassish } from './BaseController';
 import compose from './compose';
 import { routeMetadata } from './decorators/Route';
+import BaseController, { Controller, controllerClassish } from './types/BaseController';
 
 export default function routeIntegrator<T extends Object>(app: Application, ...controllers: controllerClassish[]) {
     let baseObj: BaseController | Controller;

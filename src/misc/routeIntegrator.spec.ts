@@ -4,10 +4,10 @@ import { Server } from 'http';
 import 'reflect-metadata';
 import Application, { appliance as appl } from '../Application';
 import { Post } from '../entities/Post';
-import BaseController from './BaseController';
 import ControllerEntity from './decorators/ControllerEntity';
 import Route from './decorators/Route';
 import routeIntegrator from './routeIntegrator';
+import BaseController from './types/BaseController';
 
 chai.use(chaiHttp);
 @ControllerEntity(Post)

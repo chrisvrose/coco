@@ -3,9 +3,9 @@ import { Server } from 'http';
 import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import { controllerClassish } from './misc/BaseController';
 import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
+import { controllerClassish } from './misc/types/BaseController';
 import testRoutes from './testRoutes';
 /**
  * Obtain a server module

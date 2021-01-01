@@ -3,8 +3,8 @@ import chaiHttp from 'chai-http';
 import { Server } from 'http';
 import 'mocha';
 import Application, { appliance } from './Application';
-import { Controller } from './misc/BaseController';
 import Route from './misc/decorators/Route';
+import { Controller } from './misc/types/BaseController';
 chai.use(chaiHttp);
 
 class abc extends Controller {
