@@ -17,9 +17,10 @@ export default function compose(fn: (req: Request) => Promise<any>) {
             }
         } catch (e) {
             if (e instanceof ResponseError) {
+                console.log('E>', e);
                 res.status(e.statusCode).json({ ok: false, status: e.message });
             } else if (Array.isArray(e)) {
-                console.log('array', e);
+                console.log('E>array', e);
                 if (e.length > 0) {
                     if (e[0] instanceof ValidationError) {
                         // console.warn('std error2');
@@ -34,6 +35,7 @@ export default function compose(fn: (req: Request) => Promise<any>) {
                     res.status(500).json({ ok: false, status: e.map(err => err) });
                 }
             } else {
+                console.log('E>General error', e);
                 // console.log(e);
                 res.status(500).json({ ok: false, status: 'error' });
             }

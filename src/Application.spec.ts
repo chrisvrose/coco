@@ -3,14 +3,22 @@ import chaiHttp from 'chai-http';
 import { Server } from 'http';
 import 'mocha';
 import Application, { appliance } from './Application';
+import { Controller } from './misc/BaseController';
+import Route from './misc/decorators/Route';
 chai.use(chaiHttp);
 
+class abc extends Controller {
+    @Route('get', '/fakeroute')
+    async someRoute() {
+        return 42;
+    }
+}
 describe('Base Routes test', function () {
     let application: appliance;
     let server: Server;
 
     before(async function () {
-        application = await Application();
+        application = await Application(3000, false, abc);
         server = application.start();
     });
     after(async function () {
@@ -42,5 +50,12 @@ describe('Base Routes test', function () {
         const resParsed = JSON.parse(res.text);
         assert.strictEqual(resParsed.ok, false);
         assert.strictEqual(resParsed.status, 'not found');
+    });
+    it('/fakeroute - Can add routes controllers', async function () {
+        const res = await chai.request(server).get('/fakeroute');
+        assert.strictEqual(res.status, 200);
+        const resParsed = JSON.parse(res.text);
+        assert.strictEqual(resParsed.ok, true);
+        assert.strictEqual(resParsed.response, 42);
     });
 });

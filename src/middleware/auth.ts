@@ -6,9 +6,9 @@ import { AuthToken } from '../entities/AuthToken';
 /**
  *
  * @param role The role identifier
- * @param geq Whether to allow greater role values too
+ * @param geq Whether to allow greater role values too. False by default
  */
-export function authRoleEquals(role: number, geq: boolean) {
+export function authRole(role: number, geq: boolean = false) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
             //get the repo

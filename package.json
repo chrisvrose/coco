@@ -4,7 +4,7 @@
     "description": "",
     "main": "src",
     "scripts": {
-        "test": "find ./src -name '*.spec.ts' | xargs ts-mocha test/*.ts",
+        "test": "find ./src -name '*.spec.ts' | xargs ts-mocha test/*.ts ",
         "start": "ts-node src/index.ts",
         "dev": "nodemon",
         "doc": "typedoc --tsconfig tsconfig.json"
@@ -22,7 +22,7 @@
         "tabWidth": 4,
         "semi": true,
         "singleQuote": true,
-        "printWidth": 120
+        "printWidth": 125
     },
     "repository": {
         "type": "git",

@@ -4,7 +4,6 @@ import { Server } from 'http';
 import 'mocha';
 import 'reflect-metadata';
 import Application, { appliance } from '../Application';
-import routeIntegrator from '../misc/routeIntegrator';
 import UserController from './UserController';
 chai.use(chaiHttp);
 
@@ -13,17 +12,17 @@ describe('User Controller', function () {
     let server: Server;
     let userid: string;
     before(async function () {
-        application = await Application();
+        //add user controller directly
+        application = await Application(3000, false, UserController);
     });
     after(async function () {
         server.close();
         return application.close();
     });
-    it('Can add routes for controller and start', async function () {
-        routeIntegrator(application.app, UserController);
+    it('Start Server', async function () {
         server = application.start();
     });
-
+    //c
     it('Register user', async function () {
         const res = await chai
             .request(server)
@@ -37,6 +36,7 @@ describe('User Controller', function () {
         assert.strictEqual(typeof body.response, 'string', 'Expected string');
         userid = body.response;
     });
+    //r
     it('get created user', async function () {
         const res = await chai.request(server).get('/user/' + userid);
         assert.strictEqual(res.status, 200);
@@ -55,8 +55,15 @@ describe('User Controller', function () {
         //atleast one user
         assert.isAtLeast(body.response.length, 1);
     });
+    //d
     it('remove user', async function () {
         const res = await chai.request(server).delete(`/user/${userid}`);
         assert.strictEqual(res.status, 200);
     });
+
+    //update?
+    it('update users');
+    it('login gets a authtoken');
+    it('logout');
+    it('logout all works');
 });

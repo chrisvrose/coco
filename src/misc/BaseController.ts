@@ -8,7 +8,7 @@ export abstract class Controller {}
 /**
  * A Controller with a entity attached
  */
-export default abstract class BaseController<T extends Object> extends Controller {
+export default abstract class BaseController<T extends Object = any> extends Controller {
     protected repo: Repository<T>;
     constructor(repo: Repository<T>) {
         super();
@@ -16,5 +16,6 @@ export default abstract class BaseController<T extends Object> extends Controlle
     }
 }
 
-export type baseControllerClass<T> = new (repo: Repository<T>) => BaseController<T>;
+export type baseControllerClass<T extends Object = any> = new (repo: Repository<T>) => BaseController<T>;
 export type controllerClass = new () => Controller;
+export type controllerClassish = baseControllerClass | controllerClass;

@@ -1,5 +1,5 @@
 import { genSalt, hash } from 'bcryptjs';
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsString, MinLength } from 'class-validator';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 const bcryptRounds = 10;
@@ -33,11 +33,21 @@ export class LoginUser {
     @IsEmail()
     email: string;
 
-    @Length(8)
+    // @Length(8)
+    @MinLength(8)
     pwd: string;
 }
+
+/**
+ * Validation pair
+ */
 export class RegisterUser extends LoginUser {
-    // @Length(1)
     @IsString()
     name: string;
+
+    @IsEmail()
+    email: string;
+
+    @MinLength(8)
+    pwd: string;
 }

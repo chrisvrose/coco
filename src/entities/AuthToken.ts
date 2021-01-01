@@ -9,6 +9,6 @@ import { User } from './User';
 export class AuthToken {
     @PrimaryColumn()
     authtoken: string;
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 }

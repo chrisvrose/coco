@@ -3,12 +3,18 @@ import { Server } from 'http';
 import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
+import { controllerClassish } from './misc/BaseController';
 import connectionConfig from './misc/dbconfig';
+import routeIntegrator from './misc/routeIntegrator';
 import testRoutes from './testRoutes';
 /**
  * Obtain a server module
  */
-export default async function getServer(port: number = 3000, doLogs: boolean = false): Promise<appliance> {
+export default async function getServer(
+    port: number = 3000,
+    doLogs: boolean = false,
+    ...controllers: controllerClassish[]
+): Promise<appliance> {
     const app = express();
     if (doLogs) {
         app.use(morgan('tiny'));
@@ -22,7 +28,7 @@ export default async function getServer(port: number = 3000, doLogs: boolean = f
     app.use('/test', testRoutes);
 
     //add all the routes of the app into the express application
-
+    routeIntegrator(app, ...controllers);
     // const server = app.listen(port);
     return {
         app,
