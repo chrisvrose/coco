@@ -5,4 +5,4 @@ export type AuthRequest<P = core.ParamsDictionary, ResBody = any, ReqBody = any,
     ResBody,
     ReqBody,
     ReqQuery
-> & { id?: string };
+> & { uid?: string; atoken?: string };
