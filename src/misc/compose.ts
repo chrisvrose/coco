@@ -1,12 +1,13 @@
 import { ValidationError } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import ResponseError from './error/ResponseError';
+import { AuthRequest } from './types/AuthRequest';
 
 /**
  * Wrap database functions with error handling and return
  * @param fn Function to wrap
  */
-export default function compose(fn: (req: Request) => Promise<any>) {
+export default function compose(fn: (req: AuthRequest) => Promise<any>) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
             const response = await fn(req);
