@@ -2,7 +2,7 @@ import { genSalt, hash } from 'bcryptjs';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { UserRoles } from '../misc/constants';
 const bcryptRounds = 10;
 
 @Entity()
@@ -20,7 +20,7 @@ export class User {
     @Column()
     pwd: string;
 
-    @Column({ default: 0 })
+    @Column({ default: UserRoles.RegularUser })
     role: number;
 
     @BeforeInsert()

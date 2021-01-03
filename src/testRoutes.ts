@@ -1,3 +1,6 @@
+/**
+ * @file Test routes to ensure uptime
+ */
 import { Router } from 'express';
 
 const router = Router();

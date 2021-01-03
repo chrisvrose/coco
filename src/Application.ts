@@ -7,6 +7,7 @@ import connectionConfig from './misc/dbconfig';
 import routeIntegrator from './misc/routeIntegrator';
 import { controllerClassish } from './misc/types/BaseController';
 import testRoutes from './testRoutes';
+
 /**
  * Obtain a server module
  */
