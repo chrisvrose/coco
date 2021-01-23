@@ -7,9 +7,9 @@ import { AuthRequest } from '../misc/types/AuthRequest';
 /**
  * passing (0,true) is just a simple auth for self
  * @param role The role identifier
- * @param geq Whether to allow greater role values too. False by default
+ * @param geq Whether to allow greater role values too. TRUE by default
  */
-export function authRole(role: number, geq: boolean = false) {
+export function authRole(role: number = 0, geq: boolean = true) {
     return async function (req: AuthRequest, res: Response, next: NextFunction) {
         try {
             //get the repo
