@@ -2,6 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 import { Post } from '../entities/Post';
+import { authRole } from '../middleware/auth';
 import ControllerEntity from '../misc/decorators/ControllerEntity';
 import Route from '../misc/decorators/Route';
 import ResponseError from '../misc/error/ResponseError';
@@ -21,7 +22,7 @@ export default class PostController extends BaseController<Post> {
         if (res) return res;
         else throw new ResponseError('Could not get', 404);
     }
-    @Route('post', '/post')
+    @Route('post', '/post', authRole(0, true))
     async make(req: Request) {
         try {
             const post = plainToClass(Post, req.body);
