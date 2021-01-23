@@ -6,11 +6,17 @@ Opinionated attempt at dev.
 
 ## What?
 
-An application that should also yield a collection of highly reusable server components.
+An generic server application, that has:
+ - Users
+ - Auth
+ - Posts
+ - Tests
+This application also yields a collection of highly reusable server components.
 
 ## Why
 
-An exploration of tests+ORMs+AOP.
+- An exploration of tests+ORMs+AOP+CI/CD. 
+- Attempting to combine validation and entities using decorators
 
 ## Progress
 

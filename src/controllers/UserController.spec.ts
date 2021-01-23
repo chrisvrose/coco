@@ -37,6 +37,10 @@ describe('User Controller', function () {
         assert.typeOf(body.response, 'string', 'Expected string');
         userid = body.response;
     });
+    it('login fails for incorrect pwd', async function () {
+        const res = await chai.request(server).post('/auth').send({ email: 'foo@bar.baz', pwd: 'notpassword' });
+        assert.strictEqual(res.status, 401);
+    });
     it('login gets a token-like', async function () {
         const res = await chai.request(server).post('/auth').send({ email: 'foo@bar.baz', pwd: 'password' });
         const { text } = res;

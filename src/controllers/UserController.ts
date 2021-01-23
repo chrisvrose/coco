@@ -1,4 +1,5 @@
 import { compare } from 'bcryptjs';
+import { assert } from 'chai';
 import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
@@ -22,7 +23,8 @@ export default class UserController extends BaseController<User> {
             try {
                 const user = await this.repo.findOneOrFail({ where: { email: userpass.email } });
                 // validate pwd
-                await compare(userpass.pwd, user.pwd);
+                const res = await compare(userpass.pwd, user.pwd);
+                assert(res);
                 // generate new authtoken
                 const authtoken = new AuthToken();
                 authtoken.authtoken = generateToken({ user: user.id });
@@ -61,7 +63,9 @@ export default class UserController extends BaseController<User> {
         await validateOrReject(user);
         try {
             // console.log('I>new user', user);
-            const result = await this.repo.save(user);
+            //transform to new class
+            const userBody = plainToClass(User, user);
+            const result = await this.repo.save(userBody);
             return result.id;
         } catch (e) {
             console.log(e);
